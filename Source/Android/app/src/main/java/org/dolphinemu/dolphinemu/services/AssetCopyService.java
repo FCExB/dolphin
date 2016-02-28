@@ -71,21 +71,32 @@ public final class AssetCopyService extends IntentService
 	private void copyAsset(String asset, String output)
 	{
 		Log.verbose("[AssetCopyService] Copying " + asset + " to " + output);
-		InputStream in = null;
-		OutputStream out = null;
-
-		try
-		{
-			in = getAssets().open(asset);
-			out = new FileOutputStream(output);
-			copyFile(in, out);
-			in.close();
-			out.close();
-		}
-		catch (IOException e)
-		{
-			Log.error("[AssetCopyService] Failed to copy asset file: " + asset + e.getMessage());
-		}
+                InputStream in = null;
+                OutputStream out = null;
+                try
+                {
+                        try
+                        {
+                                in = getAssets().open(asset);
+                                try
+                                {
+                                        out = new FileOutputStream(output);
+                                        copyFile(in, out);
+                                }
+                                finally
+                                {
+                                        if(out != null) out.close();
+                                }
+                        }
+                        finally
+                        {
+                                if(in != null) in.close();
+                        }
+                }
+                catch (IOException e)
+                {
+                        Log.error("[AssetCopyService] Failed to copy asset file: " + asset + e.getMessage());
+                }
 	}
 
 	private void copyAssetFolder(String assetFolder, String outputFolder)

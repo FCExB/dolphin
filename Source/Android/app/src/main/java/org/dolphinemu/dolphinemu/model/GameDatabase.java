@@ -140,7 +140,7 @@ public final class GameDatabase extends SQLiteOpenHelper
 			}
 		}
 
-
+		fileCursor.close();
 		// Get a cursor listing all the folders the user has added to the library.
 		Cursor folderCursor = database.query(TABLE_NAME_FOLDERS,
 				null,    // Get all columns.
@@ -154,7 +154,7 @@ public final class GameDatabase extends SQLiteOpenHelper
 
 		// Possibly overly defensive, but ensures that moveToNext() does not skip a row.
 		folderCursor.moveToPosition(-1);
-
+		
 		// Iterate through all results of the DB query (i.e. all folders in the library.)
 		while (folderCursor.moveToNext())
 		{
